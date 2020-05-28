@@ -1,0 +1,18 @@
+{
+  "name": "trash-talker",
+  "version": "1.0.0",
+  "description": "1. `cp db/message.sample.db db/message/db`",
+  "main": "index.js",
+  "dependencies": {
+    "@slack/web-api": "^5.9.0",
+    "aws-sdk": "^2.685.0",
+    "better-sqlite3": "^7.0.1",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

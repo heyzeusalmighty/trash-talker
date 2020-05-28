@@ -1,0 +1,6 @@
+.env
+channels.json
+/db/message.db
+/node_modules
+package-lock.json
+wordStatsForSite.json
