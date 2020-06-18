@@ -1,24 +1,21 @@
+const fs = require('fs');
 const AWS = require('aws-sdk');
-// Enter copied or downloaded access ID and secret key here
-// const ID = '';
-// const SECRET = '';
-// const BUCKET_NAME = 'test-bucket';
 const AWS_ID = process.env.AWS_ID;
 const AWS_SECRET = process.env.AWS_SECRET;
 const BUCKET_NAME = process.env.BUCKET_NAME;
 
 const s3 = new AWS.S3({
-  accessKeyId: ID,
-  secretAccessKey: SECRET
+  accessKeyId: AWS_ID,
+  secretAccessKey: AWS_SECRET
 });
 
-const uploadFile = (fileName) => {
-  const fileContent = fs.readFileSync(fileName);
+const uploadFile = () => {
+  const fileContent = fs.readFileSync('./wordStatsForSite.json');
 
   // Setting up S3 upload parameters
   const params = {
     Bucket: BUCKET_NAME,
-    Key: 'cat.jpg', // File name you want to save as in S3
+    Key: 'wordStatsForSite.json',
     Body: fileContent
   };
 
@@ -30,3 +27,5 @@ const uploadFile = (fileName) => {
       console.log(`File uploaded successfully. ${data.Location}`);
   });
 };
+
+module.exports = uploadFile;
