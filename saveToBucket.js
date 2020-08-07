@@ -11,20 +11,15 @@ const s3 = new AWS.S3({
 
 const uploadFile = () => {
   const fileContent = fs.readFileSync('./wordStatsForSite.json');
-
-  // Setting up S3 upload parameters
-  const params = {
+  s3.upload({
     Bucket: BUCKET_NAME,
     Key: 'wordStatsForSite.json',
     Body: fileContent
-  };
-
-  // Uploading files to the bucket
-  s3.upload(params, function(err, data) {
-      if (err) {
-          throw err;
-      }
-      console.log(`File uploaded successfully. ${data.Location}`);
+  }, (err, data) => {
+    if (err) {
+        throw err;
+    }
+    console.log(`File uploaded successfully. ${data.Location}`);
   });
 };
 

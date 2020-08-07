@@ -25,16 +25,18 @@ const buildWordStats = async messages => {
 
 const buildAllWordStats = async () => {
   const users = await data.getAllUsers();
-  // console.log(users);
   const userMap = {};
   for (const user of users) {
     const messages = await data.getUserMessages(user.id);
-    // console.log(messages);
-    const wordStats = await buildWordStats(messages);
-    userMap[user.real_name] = {
-      stats: wordStats,
-      count: messages.length,
-    };
+    if (messages.length > 0) {
+      const wordStats = await buildWordStats(messages);
+      userMap[user.real_name] = {
+        stats: wordStats,
+        count: messages.length,
+      };
+    } else {
+      console.log('skipping 0 message people:', user.real_name)
+    }    
   }
   await writeFile('./wordStatsForSite.json', JSON.stringify(userMap));
   return userMap;

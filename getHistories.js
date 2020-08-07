@@ -23,13 +23,27 @@ async function getChannels(name) {
   }
 }
 
-async function findHistory(id) {
+async function getTotalHistory(channel, allMessages = [], cursor) {
   try {
+    const params = {
+      token,
+      channel,
+      cursor,
+    };
     const result = await web.conversations.history({
       token,
-      channel: id
+      channel,
+      cursor,
+      limit: 200,
     });
-    return result;
+    const { messages, response_metadata } = result;
+    const filtered = messages.filter(filteringCriteria)
+      .map(msg => ({ message: msg.text, user: msg.user, ts: msg.ts }));
+    allMessages.push(...filtered);
+    if (response_metadata.next_cursor) {
+      return getTotalHistory(channel, allMessages, response_metadata.next_cursor);
+    }
+    return allMessages;
   }
   catch(error) {
     console.error(error);
@@ -37,22 +51,22 @@ async function findHistory(id) {
   }
 }
 
+
 const filteringCriteria = msg =>
   msg.type === 'message' &&
   !msg.subtype &&
   msg.text.indexOf('http') === -1
 
 async function grabAllMessages() {
-  console.log('grab all historyies')
+  console.log('grab all history-ies');
   const channels = await getChannels();
   const histories = [];
   for (const channel of channels) {
     const { name, id } = channel;
-    const history = await findHistory(id);
-    const { messages } = history;
-    const filtered = messages.filter(filteringCriteria)
-      .map(msg => ({ message: msg.text, user: msg.user, ts: msg.ts }));
-    histories.push(...filtered);
+    const messages = await getTotalHistory(id);
+    const numberOfMessages = (messages) ? messages.length : 0;
+    console.log(`channel: ${name} => ${numberOfMessages} messages`);
+    histories.push(...messages);
   };
   return histories;
 };
