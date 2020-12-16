@@ -4,3 +4,4 @@ channels.json
 /node_modules
 package-lock.json
 wordStatsForSite.json
+clean-feats.json

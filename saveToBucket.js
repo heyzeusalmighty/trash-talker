@@ -9,11 +9,11 @@ const s3 = new AWS.S3({
   secretAccessKey: AWS_SECRET
 });
 
-const uploadFile = () => {
-  const fileContent = fs.readFileSync('./wordStatsForSite.json');
+const uploadFile = (file) => {
+  const fileContent = fs.readFileSync(`./${file}`);
   s3.upload({
     Bucket: BUCKET_NAME,
-    Key: 'wordStatsForSite.json',
+    Key: file,
     Body: fileContent
   }, (err, data) => {
     if (err) {

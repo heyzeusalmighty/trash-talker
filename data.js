@@ -40,9 +40,43 @@ async function getUserMessages(userId) {
   return messages;
 }
 
+async function getLastFeat() {
+  const lastFeatQ = db.prepare('SELECT ts from feats order by ts desc limit 1');
+  const lastOne = await lastFeatQ.get();
+  return lastOne.ts;
+}
+
+async function getLastMessage() {
+  const lastMessageQ = db.prepare('SELECT ts from messages order by ts desc limit 1');
+  const lastOne = await lastMessageQ.get();
+  return lastOne.ts;
+}
+
+async function dumpFeatsIntoDatabase(messages) {
+  const insert = db.prepare(`
+    INSERT INTO feats (ts, user, message) 
+    SELECT @ts, @user, @message
+    WHERE NOT EXISTS (SELECT 1 FROM feats WHERE ts = @ts)
+  `);
+
+  try {
+    const insertThem = db.transaction((slackMessages) => {
+      for (const msg of slackMessages) insert.run(msg);
+    });
+    await insertThem(messages);
+  } catch (err) {
+    if (!db.inTransaction) throw err;
+  }
+  
+  return;
+}
+
 module.exports = {
   dumpMessagesIntoDatabase,
   dumpUsersIntoDatabase,
+  dumpFeatsIntoDatabase,
   getAllUsers,
-  getUserMessages
+  getUserMessages,
+  getLastFeat,
+  getLastMessage
 }
