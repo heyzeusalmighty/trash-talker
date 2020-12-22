@@ -52,6 +52,12 @@ async function getLastMessage() {
   return lastOne.ts;
 }
 
+async function getAllFeats() {
+  const featQuery = db.prepare('Select * from feats');
+  const feets = await featQuery.all();
+  return feets;
+}
+
 async function dumpFeatsIntoDatabase(messages) {
   const insert = db.prepare(`
     INSERT INTO feats (ts, user, message) 
@@ -78,5 +84,6 @@ module.exports = {
   getAllUsers,
   getUserMessages,
   getLastFeat,
-  getLastMessage
+  getLastMessage,
+  getAllFeats
 }

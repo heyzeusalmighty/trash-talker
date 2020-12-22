@@ -28,6 +28,7 @@ const acceptableReactions = [
   }, {});
 
   const lastTs = await data.getLastFeat();
+  const feats = await data.getAllFeats();
   const admin = process.env.ADMIN;
   const channelId = process.env.FEATS_CHANNEL_ID;
   const messages = await getHistory.getTotalHistory(channelId, [], undefined, lastTs);
@@ -75,7 +76,8 @@ const acceptableReactions = [
   });
 
   const done = filtered.map(x => ({ user: x.name, message: x.message, ts: x.ts }));
-  await writeFile('./clean-feats.json', JSON.stringify(done));
+  const combined = [...feats, ...done];
+  await writeFile('./clean-feats.json', JSON.stringify(combined));
   await data.dumpFeatsIntoDatabase(done);
   saveToBucket('clean-feats.json');
 })();
