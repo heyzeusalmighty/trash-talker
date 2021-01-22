@@ -12,4 +12,9 @@
     BUCKET_NAME='bucket/for/data'
     DATABASE_BACKUP='bucket/for/backup'
     FEATS_CHANNEL_ID='IOUIUJM<JL'
+    PGUSER=dbuser \
+    PGHOST=database.server.com \
+    PGPASSWORD=secretpassword \
+    PGDATABASE=mydb \
+    PGPORT=3211 \
     ```
