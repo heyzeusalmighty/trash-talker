@@ -12,7 +12,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "backup": "node index",
+    "feats": "node getAthleticFeats",
+    "delete": "node deleteOldFiles"
   },
   "author": "",
   "license": "ISC"

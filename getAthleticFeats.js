@@ -16,7 +16,10 @@ const acceptableReactions = [
   'soccer',
   'ab',
   'man-biking',
-  'man-lifting-weights'
+  'man-lifting-weights',
+  'flying_disc',
+  'canoe',
+  'man_in_lotus_position'
 ];
 
 (async () => {
@@ -77,6 +80,7 @@ const acceptableReactions = [
 
   const done = filtered.map(x => ({ user: x.name, message: x.message, ts: x.ts }));
   const combined = [...feats, ...done];
+  console.log(combined.length)
   await writeFile('./clean-feats.json', JSON.stringify(combined));
   await data.dumpFeatsIntoDatabase(done);
   saveToBucket('clean-feats.json');
